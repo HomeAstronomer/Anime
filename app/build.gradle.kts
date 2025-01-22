@@ -1,12 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.compose )
+    alias(libs.plugins.jetbrains.kotlin.serialization)
+
 }
 
 android {
     namespace = "com.ang.anime"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.ang.anime"
@@ -53,7 +55,13 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.retrofit.gson.convertor)
-    implementation("androidx.navigation:navigation-compose:2.8.5")
+    implementation(libs.kotlix.serialization.core)
+    implementation(libs.androidx.navigation.compose)
+    implementation ("androidx.compose.ui:ui-text-google-fonts:1.5.1")
+    implementation(libs.androidx.material.icons.extended)
+
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
