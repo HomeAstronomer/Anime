@@ -31,16 +31,8 @@ data class DashBoardDetailRoute(val animeId:Int=0)
 
 
 @Composable
-fun NavHostInitializer(navController: NavHostController, service: AnimeApiService) {
+fun NavHostInitializer(navController: NavHostController) {
     NavHost(navController = navController, startDestination = DashBoardRoute) {
-//        composable<SplashRoute>(
-//            enterTransition = { slideInOutTransition(slideDirection = SlideDirection.RightToLeft).first() },
-//            exitTransition = { fadeOut(tween(300, 100)) },
-//            popExitTransition = { slideInOutTransition(slideDirection = SlideDirection.LeftToRight).second() },
-//            popEnterTransition = { slideInOutTransition(slideDirection = SlideDirection.LeftToRight).first() },
-//        ) {
-//            SplashScreen(hiltViewModel(), navController)
-//        }
 
         composable<DashBoardRoute>(
             enterTransition = { slideInOutTransition(slideDirection = SlideDirection.RightToLeft).first() },
@@ -48,7 +40,7 @@ fun NavHostInitializer(navController: NavHostController, service: AnimeApiServic
             popExitTransition = { slideInOutTransition(slideDirection = SlideDirection.LeftToRight).second() },
             popEnterTransition = { fadeIn() },
         ) {
-            DashBoardCompose( navController,service)
+            DashBoardCompose( navController)
         }
 
 
@@ -60,8 +52,6 @@ fun NavHostInitializer(navController: NavHostController, service: AnimeApiServic
         ) {backStackEntry->
             DashBoardDetailCompose(
                 navController,
-                service,
-                animeId =backStackEntry.toRoute<DashBoardDetailRoute>().animeId
             )
         }
     }

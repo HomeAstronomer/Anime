@@ -31,6 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.ang.anime.data.model.DataDashBoard
 import com.ang.anime.data.model.Genres
@@ -45,14 +47,11 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun DashBoardDetailCompose(
-    navController: NavHostController, service: AnimeApiService, animeId: Int = 0
+    navController: NavHostController,
+    viewModel:DetailScreenViewModel= hiltViewModel()
 ) {
-    var resp = remember { mutableStateOf<DataDashBoard?>(null) }
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            resp.value = service.getAnimeDetails(animeId).body()?.data
-        }
-    }
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(topBar = {
         Box(
             Modifier
@@ -73,19 +72,19 @@ fun DashBoardDetailCompose(
         Box(Modifier.fillMaxSize().padding(it)) {
             val scrollState= rememberScrollState()
 
-        if (resp.value != null) {
+        if (uiState.value.animeList != null) {
 
                 Column(Modifier.padding(horizontal = 24.dp).verticalScroll(state = scrollState,enabled = true)) {
                     Text(
-                        resp.value?.title ?: "",
+                        uiState.value.animeList?.title ?: "",
                         modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center
 
                     )
-                    if (resp.value?.trailer?.youtubeId?.isEmpty() == false) {
-                        resp.value?.trailer?.youtubeId?.let { id ->
+                    if (uiState.value.animeList?.trailer?.youtubeId?.isEmpty() == false) {
+                        uiState.value.animeList?.trailer?.youtubeId?.let { id ->
                             YoutubePlayer(id)
                         }
                     } else {
@@ -98,7 +97,7 @@ fun DashBoardDetailCompose(
                                     shape = RoundedCornerShape(12.dp)
                                 )
                                 .clip(RoundedCornerShape(12.dp)),
-                            data = resp.value?.images?.jpg?.largeImageUrl ?: ""
+                            data = uiState.value.animeList?.images?.jpg?.largeImageUrl ?: ""
                         )
                     }
                     Text(
@@ -108,24 +107,24 @@ fun DashBoardDetailCompose(
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        resp.value?.synopsis ?: "",
+                        uiState.value.animeList?.synopsis ?: "",
                         modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        formatGenres(resp.value?.genres.orEmpty()),
+                        formatGenres(uiState.value.animeList?.genres.orEmpty()),
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        "Number Of Episodes ;- ${resp.value?.episodes ?: 0}",
+                        "Number Of Episodes ;- ${uiState.value.animeList?.episodes ?: 0}",
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        text = "Rating: ${resp.value?.rating ?: 0}",
+                        text = "Rating: ${uiState.value.animeList?.rating ?: 0}",
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,

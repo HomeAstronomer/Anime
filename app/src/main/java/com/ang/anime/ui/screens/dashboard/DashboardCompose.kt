@@ -29,6 +29,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.ang.anime.data.model.DashBoardResponse
 import com.ang.anime.data.model.DataDashBoard
@@ -41,15 +43,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 @Composable
-fun DashBoardCompose(navController: NavHostController, service: AnimeApiService) {
+fun DashBoardCompose(navController: NavHostController,
+                     dashBoardViewModel: DashboardViewModel= hiltViewModel()
+) {
 
-
-    var resp = remember{ mutableStateOf<DashBoardResponse?>(null) }
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-             resp.value =  service.getTopAnime(1).body()
-        }
-    }
+    val uiState=dashBoardViewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(topBar = {
         Box(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.secondaryContainer).statusBarsPadding()){
@@ -60,9 +58,9 @@ fun DashBoardCompose(navController: NavHostController, service: AnimeApiService)
     },
         containerColor = MaterialTheme.colorScheme.surfaceDim) {
         Box(Modifier.fillMaxSize().padding(it)){
-            if(resp.value!=null) {
+            if(uiState.value.animeList.isNotEmpty()) {
                 LazyColumn {
-                    items(resp.value?.data?.toList() ?: emptyList<DataDashBoard>()) {
+                    items(uiState.value.animeList) {
                         AnimeItem(
                             it.title ?: "",
                             it.episodes ?: 0,

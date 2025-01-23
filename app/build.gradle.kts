@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose )
     alias(libs.plugins.jetbrains.kotlin.serialization)
-
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.google.hilt)
 }
 
 android {
@@ -57,10 +58,13 @@ dependencies {
     implementation(libs.retrofit.gson.convertor)
     implementation(libs.kotlix.serialization.core)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.material.icons.extended)  // Make sure to use the latest version
+    implementation(libs.androidx.material.icons.extended)
     implementation (libs.androidyoutubeplayer.core)
-    // Add the YouTube extension
 
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.android.gradle)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.androidx.navigation.compose)
 
 
 

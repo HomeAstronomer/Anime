@@ -13,23 +13,18 @@ import androidx.navigation.compose.rememberNavController
 import com.ang.anime.data.remote.AnimeApiService
 import com.ang.anime.ui.navigation.NavHostInitializer
 import com.ang.anime.ui.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://api.jikan.moe/")
-            .addConverterFactory(GsonConverterFactory.create()) // JSON to Object Mapping
-            .build()
-        val service=retrofit.create(AnimeApiService::class.java)
-
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             AppTheme {
-                NavHostInitializer(navController, service)
+                NavHostInitializer(navController)
             }
         }
     }
