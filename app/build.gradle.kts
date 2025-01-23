@@ -57,8 +57,9 @@ dependencies {
     implementation(libs.retrofit.gson.convertor)
     implementation(libs.kotlix.serialization.core)
     implementation(libs.androidx.navigation.compose)
-    implementation ("androidx.compose.ui:ui-text-google-fonts:1.5.1")
-    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.material.icons.extended)  // Make sure to use the latest version
+    implementation (libs.androidyoutubeplayer.core)
+    // Add the YouTube extension
 
 
 

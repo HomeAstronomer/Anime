@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -57,17 +59,23 @@ fun DashBoardCompose(navController: NavHostController, service: AnimeApiService)
         }
     },
         containerColor = MaterialTheme.colorScheme.surfaceDim) {
-        Box(Modifier.padding(it)){
-            LazyColumn {
-                items(resp.value?.data?.toList()?:emptyList<DataDashBoard>()){
-                    AnimeItem(it.title?:"",
-                        it.episodes?:0,
-                        it.score?:0.0,
-                        it.images?.jpg?.largeImageUrl?:""){
-                        navController.navigate(DashBoardDetailRoute(animeId = it.malId?:0))
-                    }
+        Box(Modifier.fillMaxSize().padding(it)){
+            if(resp.value!=null) {
+                LazyColumn {
+                    items(resp.value?.data?.toList() ?: emptyList<DataDashBoard>()) {
+                        AnimeItem(
+                            it.title ?: "",
+                            it.episodes ?: 0,
+                            it.score ?: 0.0,
+                            it.images?.jpg?.largeImageUrl ?: ""
+                        ) {
+                            navController.navigate(DashBoardDetailRoute(animeId = it.malId ?: 0))
+                        }
 
+                    }
                 }
+            }else{
+                CircularProgressIndicator(Modifier.size(64.dp).align(Alignment.Center))
             }
         }
     }
@@ -104,7 +112,6 @@ fun AnimeItem(
             data =posterUrl
         )
 
-        // Anime Details
         Column(modifier = Modifier.weight(1f).padding(4.dp)) {
             Text(
                 text = title,

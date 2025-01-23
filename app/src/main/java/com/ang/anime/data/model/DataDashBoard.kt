@@ -31,6 +31,7 @@ data class DataDashBoard (
   @SerializedName("background"      ) var background     : String?                 = null,
   @SerializedName("season"          ) var season         : String?                 = null,
   @SerializedName("year"            ) var year           : Int?                    = null,
+  @SerializedName("genres"            ) var genres           : List<Genres? >                   = emptyList<Genres>(),
 )
 
 data class Images (
@@ -63,5 +64,14 @@ data class Jpg (
   @SerializedName("image_url"       ) var imageUrl      : String? = null,
   @SerializedName("small_image_url" ) var smallImageUrl : String? = null,
   @SerializedName("large_image_url" ) var largeImageUrl : String? = null
+
+)
+
+data class Genres (
+
+  @SerializedName("mal_id" ) var malId : Int?    = null,
+  @SerializedName("type"   ) var type  : String? = null,
+  @SerializedName("name"   ) var name  : String? = null,
+  @SerializedName("url"    ) var url   : String? = null
 
 )
